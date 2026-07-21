@@ -4,6 +4,7 @@ from dynamics_solver import (
     Escalon,
     EspacioEstados,
     FuncionTransferencia,
+    Gain,
     InterconnectedSystem,
     SumadorRestador,
 )
@@ -252,3 +253,26 @@ def test_hierarchical_and_summing():
     assert np.isclose(C[0, 0], 5.0, atol=1e-5)
     assert np.isclose(D[0, 0], 0.0, atol=1e-5)
     print("\n¡Linealización entrada-salida jerárquica validada con éxito!")
+
+
+def test_execution_order_computed_once():
+    """Verifica que el orden de ejecución se calcule una sola vez antes de evaluar salidas."""
+    sys_net = InterconnectedSystem()
+    g1 = Gain(2.0, "g1")
+    g2 = Gain(3.0, "g2")
+    sys_net.add_subsystem(g1)
+    sys_net.add_subsystem(g2)
+    sys_net.connect(g1, 0, g2, 0)
+
+    # Antes de evaluar, ordered_subsystems está vacío
+    assert len(sys_net.ordered_subsystems) == 0
+
+    # Al evaluar por primera vez, se calcula el orden topológico
+    sys_net.update_outputs(np.zeros(0), np.array([1.0]))
+    assert len(sys_net.ordered_subsystems) == 2
+
+    first_order = sys_net.ordered_subsystems
+
+    # En evaluaciones subsiguientes, se reutiliza el mismo orden calculado sin recalcular
+    sys_net.update_outputs(np.zeros(0), np.array([2.0]))
+    assert sys_net.ordered_subsystems is first_order

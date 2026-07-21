@@ -472,6 +472,7 @@ class InterconnectedSystem(SubsystemBase):
             )
         self.subsystems.append(sys)
         sys.parent = self
+        self.ordered_subsystems = []
 
         # Drenar conexiones temporales que el subsistema haya registrado antes de agregarse
         while sys._temp_connections:
@@ -516,6 +517,7 @@ class InterconnectedSystem(SubsystemBase):
         if key not in self.connections:
             self.connections[key] = []
         self.connections[key].append((source_subsystem, source_output_idx))
+        self.ordered_subsystems = []
 
     def map_input(
         self, external_input_idx: int, target_subsystem: SubsystemBase, target_input_idx: int
@@ -538,6 +540,7 @@ class InterconnectedSystem(SubsystemBase):
         if key not in self.external_connections:
             self.external_connections[key] = []
         self.external_connections[key].append(external_input_idx)
+        self.ordered_subsystems = []
 
     def map_output(
         self, external_output_idx: int, source_subsystem: SubsystemBase, source_output_idx: int
@@ -559,6 +562,7 @@ class InterconnectedSystem(SubsystemBase):
         if external_output_idx not in self.output_mappings:
             self.output_mappings[external_output_idx] = []
         self.output_mappings[external_output_idx].append((source_subsystem, source_output_idx))
+        self.ordered_subsystems = []
 
     def compute_execution_order(self) -> None:
         """Resuelve automáticamente el orden de ejecución utilizando ordenamiento topológico (Algoritmo de Kahn)."""
@@ -707,6 +711,9 @@ class InterconnectedSystem(SubsystemBase):
         u_ext_func: Callable[[float], np.ndarray] | None = None,
     ) -> np.ndarray:
         """Punto de entrada compatible con `scipy.integrate.solve_ivp` para la red completa."""
+        if not self.ordered_subsystems:
+            self.compute_execution_order()
+
         states = {sys.name: self._extract_local_state(x, sys.name) for sys in self.subsystems}
         u_ext = u_ext_func(t) if u_ext_func else None
 

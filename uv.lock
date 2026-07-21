@@ -650,7 +650,7 @@ wheels = [
 
 [[package]]
 name = "dynamics-solver"
-version = "0.1.1a2"
+version = "0.1.1a3"
 source = { editable = "." }
 dependencies = [
     { name = "matplotlib", version = "3.10.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },

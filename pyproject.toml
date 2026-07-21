@@ -1,6 +1,6 @@
 [project]
 name = "dynamics-solver"
-version = "0.1.1a3"
+version = "0.1.1a4"
 description = "Módulo para el modelado y simulación de sistemas dinámicos no lineales interconectados."
 readme = "README.md"
 requires-python = ">=3.10"
