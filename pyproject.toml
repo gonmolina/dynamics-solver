@@ -1,0 +1,86 @@
+[project]
+name = "dynamics-solver"
+version = "0.1.1a3"
+description = "Módulo para el modelado y simulación de sistemas dinámicos no lineales interconectados."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "gonza", email = "gonza@example.com" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+keywords = [
+    "dynamics", "solver", "block-diagram", "simulation", "differential-equations", "feedback", "control", "state-space"
+]
+dependencies = [
+    "matplotlib>=3.9.4",
+    "numpy>=2.0.0",
+    "scipy>=1.10.0",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.39.9",
+    "control>=0.10.0",
+    "ipympl>=0.10.0",
+    "jupyterlab>=4.5.9",
+    "jupyterlab-vim>=4.1.4",
+    "jupytext>=1.19.4",
+    "pyqt6>=6.10.2",
+    "pytest>=8.4.2",
+    "ruff>=0.15.20",
+    "setuptools>=82.0.1",
+    "slycot>=0.5.4",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.basedpyright]
+typeCheckingMode = "standard"
+# Disable some extremely strict rules that are not helpful with untyped libraries (like scipy)
+reportUnknownParameterType = false
+reportUnknownArgumentType = false
+reportUnknownVariableType = false
+reportUnknownMemberType = false
+reportMissingParameterType = false
+reportImplicitOverride = false
+reportUnannotatedClassAttribute = false
+
+[tool.setuptools.packages.find]
+include = ["dynamics_solver"]
+exclude = ["ejemplos", "docs", "tests"]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
